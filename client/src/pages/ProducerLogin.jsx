@@ -1,14 +1,17 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { SignIn } from '@clerk/clerk-react';
 
 function ProducerLogin() {
-  const navigate = useNavigate();
+  const [showAuth, setShowAuth] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Navigate to producer dashboard when Login is clicked
-    navigate('/producer-dashboard');
-  };
+  useEffect(() => {
+    // Delay showing auth component for smoother transition
+    const timer = setTimeout(() => {
+      setShowAuth(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <main>
@@ -16,7 +19,7 @@ function ProducerLogin() {
         <div className='home-block'>
           <div className="logo-div">
             <i className="fa-solid fa-recycle"></i>
-            <p className="logo">Waste-to-Wonder</p>
+            <p className="logo">Taka Bora</p>
           </div>
 
           <p className="catch-phrase">
@@ -27,31 +30,26 @@ function ProducerLogin() {
             <i className="fa-solid fa-recycle"></i>
           </div>
             
-
           <p className='producer-welcome-phrase'>Welcome Producer! Login to your account below!</p>
 
-          <div className='form'>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="name">Username</label>
-              <input type="text" placeholder="Enter username"></input>
-              <label htmlFor="password">Pasword</label>
-              <input type="password" placeholder="Enter password"></input>
-
-              <div className="buttons">
-                <Link to="/"className='back-button'>Back</Link>
-                <button className='producer-signup-button' type="submit">Login</button>
-              </div>
-
-              <p>Don't have an account? <Link to="/producer-signup" style={{color:'#009966', textDecoration:'underline'}}>Sign up</Link></p>
-            </form>
+          <div className={`clerk-container ${showAuth ? 'fade-in' : 'hidden'}`}>
+            {showAuth && (
+              <SignIn 
+                afterSignInUrl="/producer-dashboard"
+                redirectUrl="/producer-dashboard"
+              />
+            )}
           </div>
 
+          <div className="buttons" style={{marginTop: '20px'}}>
+            <Link to="/" className='back-button'>Back to Home</Link>
+          </div>
 
+          <p>Don't have an account? <Link to="/producer-signup" style={{color:'#009966', textDecoration:'underline'}}>Sign up</Link></p>
         </div>
       </div>
     </main>
   )
 }
-
 
 export default ProducerLogin;

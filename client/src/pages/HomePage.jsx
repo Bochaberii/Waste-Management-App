@@ -9,7 +9,7 @@ function HomePage() {
         <div className="home-block">
           <div className="logo-div">
             <i className="fa-solid fa-recycle"></i>
-            <p className="logo">Waste-to-Wonder</p>
+            <p className="logo">Taka Bora</p>
           </div>
 
           <p className="catch-phrase">

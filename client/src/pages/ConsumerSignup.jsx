@@ -1,14 +1,17 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { SignUp } from '@clerk/clerk-react';
 
 function ConsumerSignup() {
-  const navigate = useNavigate();
+  const [showAuth, setShowAuth] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Navigate to consumer dashboard when Get Started is clicked
-    navigate('/consumer-dashboard');
-  };
+  useEffect(() => {
+    // Delay showing auth component for smoother transition
+    const timer = setTimeout(() => {
+      setShowAuth(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <main>
@@ -16,7 +19,7 @@ function ConsumerSignup() {
         <div className='home-block'>
           <div className="logo-div">
             <i className="fa-solid fa-recycle"></i>
-            <p className="logo">Waste-to-Wonder</p>
+            <p className="logo">Taka Bora</p>
           </div>
 
           <p className="catch-phrase">
@@ -29,31 +32,23 @@ function ConsumerSignup() {
           
           <p className='consumer-welcome-phrase'>Welcome Collector! Sign-up to start your sustainable journey below!</p>
 
-          <div className='form'>
-            <form onSubmit={handleSubmit}>
-              <label htmlFor="name">Username</label>
-              <input type="text" placeholder="Enter username"></input>
-              <label htmlFor="email">Email</label>
-              <input type="email" placeholder="Enter email"></input>
-              <label htmlFor="password">Pasword</label>
-              <input type="password" placeholder="Enter password"></input>
-              <label htmlFor="password">Confirm Password</label>
-              <input type="password" placeholder="Confirm password"></input>
-              
-              <div className ="buttons">
-              <Link to="/" className='back-button'>Back</Link>
-              <button className='consumer-signup-button' type="submit">Get Started</button>
-              </div>
-              
-              <p>Already have an account? <Link to="/consumer-login" style={{color:'#009966', textDecoration:'underline'}}>Login</Link></p>
-            </form>
+          <div className={`clerk-container ${showAuth ? 'fade-in' : ''}`}>
+            <SignUp 
+              afterSignUpUrl="/consumer-dashboard"
+              redirectUrl="/consumer-dashboard"
+              unsafeMetadata={{ userType: 'consumer' }}
+            />
           </div>
 
-
+          <div className="buttons" style={{marginTop: '20px'}}>
+            <Link to="/" className='back-button'>Back to Home</Link>
+          </div>
+              
+          <p>Already have an account? <Link to="/consumer-login" style={{color:'#009966', textDecoration:'underline'}}>Login</Link></p>
         </div>
       </div>
     </main>
-)
+  )
 }
 
 export default ConsumerSignup;
