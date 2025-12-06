@@ -107,12 +107,18 @@ function ConsumerDashboard() {
         consumerName: user.firstName || user.username || 'Consumer'
       });
       
-      alert('Listing claimed! You can now chat with the producer.');
+      alert('✅ Listing claimed successfully! \n\nYou can now:\n• Chat with the producer via the Messages button\n• Coordinate pickup details\n• Discuss pricing');
       setShowListingDetails(false);
       fetchListings(); // Refresh listings
     } catch (error) {
       console.error('Error claiming listing:', error);
-      alert('Failed to claim listing. It may already be claimed.');
+      if (error.response?.status === 500) {
+        alert('❌ Backend server is not running. Please contact the administrator.');
+      } else if (error.message.includes('Network Error')) {
+        alert('❌ Cannot connect to server. Make sure the backend is deployed and VITE_API_URL is set correctly.');
+      } else {
+        alert('Failed to claim listing. It may already be claimed or the listing no longer exists.');
+      }
     }
   };
 

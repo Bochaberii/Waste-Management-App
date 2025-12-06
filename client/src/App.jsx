@@ -8,9 +8,23 @@ import ProducerDashboard from './pages/ProducerDashboard';
 import ConsumerDashboard from './pages/ConsumerDashboard';
 import Layout from './components/Layout';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, RedirectToSignIn, useClerk } from '@clerk/clerk-react';
 
 function App() {
+  const { loaded } = useClerk();
+
+  if (!loaded) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <h2>Loading Taka Bora...</h2>
+          <p>Preparing your waste management platform</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Router>
       <Routes>

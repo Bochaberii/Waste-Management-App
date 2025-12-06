@@ -41,6 +41,7 @@ function Chat({ onClose }) {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching conversations:', error);
+      alert('Unable to load conversations. Please make sure the backend server is running.');
       setLoading(false);
     }
   };
@@ -147,7 +148,12 @@ function Chat({ onClose }) {
               <div className="empty-conversations">
                 <i className="fas fa-comments"></i>
                 <p>No conversations yet</p>
-                <span>Claim a listing to start chatting</span>
+                <span>
+                  {user ? 
+                    "Claim a listing (as consumer) or wait for someone to claim your listing (as producer) to start chatting" 
+                    : "Loading user info..."
+                  }
+                </span>
               </div>
             ) : (
               <div className="conversation-items">
